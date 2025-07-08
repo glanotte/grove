@@ -2,6 +2,7 @@ package worktree
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -246,7 +247,7 @@ func TestWebConfig_GetSubdomain(t *testing.T) {
 			pattern := config.SubdomainPattern
 			pattern = replacePattern(pattern, "{branch}", tt.branchName)
 			pattern = replacePattern(pattern, "{project_domain}", tt.projectDomain)
-			
+
 			if pattern != tt.want {
 				t.Errorf("Subdomain = %v, want %v", pattern, tt.want)
 			}
@@ -257,7 +258,7 @@ func TestWebConfig_GetSubdomain(t *testing.T) {
 // Helper function for pattern replacement (would be in utils)
 func replacePattern(pattern, placeholder, value string) string {
 	// Simple string replacement - in real implementation might use text/template
-	return pattern[:len(pattern)-len(placeholder)] + value + pattern[len(pattern)-len(placeholder)+len(placeholder):]
+	return strings.ReplaceAll(pattern, placeholder, value)
 }
 
 // Example of a more complex helper function that could be added to config.go
@@ -265,7 +266,7 @@ func (c *Config) GetEffectiveTemplate(templateName string) (*TemplateDefinition,
 	if templateName == "" {
 		templateName = c.Templates.Default
 	}
-	
+
 	template, found := c.Templates.Available[templateName]
 	return &template, found
 }

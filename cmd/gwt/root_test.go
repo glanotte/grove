@@ -66,8 +66,9 @@ func TestRootCmd_Execute(t *testing.T) {
 
 	// Test that command can be executed (just check it doesn't panic)
 	// We don't actually run it to avoid side effects
-	if cmd.Execute == nil {
-		t.Error("Expected Execute method to be available")
+	// Execute is a method, not a field, so we can't check if it's nil
+	if cmd == nil {
+		t.Error("Expected command to not be nil")
 	}
 }
 
@@ -128,7 +129,7 @@ func TestCommandsExecuteWithoutPanic(t *testing.T) {
 	// Test version command (safe to execute)
 	versionCmd := NewRootCmd("1.0.0", "abc123", "2023-01-01")
 	versionCmd.SetArgs([]string{"version"})
-	
+
 	// This should not panic
 	defer func() {
 		if r := recover(); r != nil {

@@ -92,7 +92,7 @@ func TestManager_sanitizeBranchName(t *testing.T) {
 
 func TestManager_getWorktreePath(t *testing.T) {
 	tempDir := t.TempDir()
-	
+
 	manager := &Manager{
 		BaseDir: tempDir,
 		Config: &Config{
@@ -236,7 +236,7 @@ func TestManager_buildTemplateContext(t *testing.T) {
 func BenchmarkManager_sanitizeBranchName(b *testing.B) {
 	manager := &Manager{}
 	branchName := "feature/very-long-branch-name-with-many-characters"
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		manager.sanitizeBranchName(branchName)
@@ -252,7 +252,7 @@ func BenchmarkManager_calculatePort(b *testing.B) {
 		},
 	}
 	branchName := "feature-auth"
-	
+
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		manager.calculatePort(branchName)
@@ -262,7 +262,7 @@ func BenchmarkManager_calculatePort(b *testing.B) {
 // Test helper functions
 func setupTestManager(t *testing.T) (*Manager, string) {
 	tempDir := t.TempDir()
-	
+
 	// Create .grove directory
 	groveDir := filepath.Join(tempDir, ".grove")
 	if err := os.MkdirAll(groveDir, 0755); err != nil {

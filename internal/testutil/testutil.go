@@ -26,13 +26,13 @@ func TempDir(t *testing.T) string {
 // CreateTestRepo creates a test Git repository
 func CreateTestRepo(t *testing.T) string {
 	dir := TempDir(t)
-	
+
 	// Initialize git repo
 	err := RunCommand(dir, "git", "init", "--bare")
 	if err != nil {
 		t.Fatalf("Failed to init git repo: %v", err)
 	}
-	
+
 	return dir
 }
 
@@ -81,13 +81,13 @@ func CreateTestConfig() *worktree.Config {
 func CreateTestWorktreeStructure(t *testing.T, baseDir string) {
 	groveDir := filepath.Join(baseDir, ".grove")
 	templatesDir := filepath.Join(groveDir, "templates")
-	
+
 	// Create directories
 	err := os.MkdirAll(templatesDir, 0755)
 	if err != nil {
 		t.Fatalf("Failed to create .grove/templates: %v", err)
 	}
-	
+
 	// Create template files
 	dockerTemplate := `version: '3.8'
 services:
@@ -102,17 +102,17 @@ networks:
   {{.NetworkName}}:
     external: true
 `
-	
+
 	envTemplate := `APP_NAME={{.ProjectName}}_{{.BranchName}}
 APP_URL=https://{{.BranchName}}.{{.ProjectDomain}}
 WEB_PORT={{.WebPort}}
 `
-	
+
 	err = ioutil.WriteFile(filepath.Join(templatesDir, "docker-compose.yml.tmpl"), []byte(dockerTemplate), 0644)
 	if err != nil {
 		t.Fatalf("Failed to create docker-compose template: %v", err)
 	}
-	
+
 	err = ioutil.WriteFile(filepath.Join(templatesDir, ".env.tmpl"), []byte(envTemplate), 0644)
 	if err != nil {
 		t.Fatalf("Failed to create .env template: %v", err)
@@ -123,12 +123,12 @@ WEB_PORT={{.WebPort}}
 func CreateTestManager(t *testing.T) (*worktree.Manager, string) {
 	baseDir := TempDir(t)
 	CreateTestWorktreeStructure(t, baseDir)
-	
+
 	manager, err := worktree.NewManager(baseDir)
 	if err != nil {
 		t.Fatalf("Failed to create manager: %v", err)
 	}
-	
+
 	return manager, baseDir
 }
 
@@ -152,7 +152,7 @@ func AssertFileContains(t *testing.T, path, expectedContent string) {
 	if err != nil {
 		t.Fatalf("Failed to read file %s: %v", path, err)
 	}
-	
+
 	if !contains(string(content), expectedContent) {
 		t.Errorf("Expected file %s to contain %q, but it doesn't. Content:\n%s", path, expectedContent, string(content))
 	}
@@ -183,26 +183,26 @@ func contains(str, substr string) bool {
 
 // MockGitCommand creates a mock git command for testing
 type MockGitCommand struct {
-	Commands []string
-	Outputs  []string
-	Errors   []error
+	Commands  []string
+	Outputs   []string
+	Errors    []error
 	CallCount int
 }
 
 func (m *MockGitCommand) Run(command string, args ...string) ([]byte, error) {
 	defer func() { m.CallCount++ }()
-	
+
 	fullCommand := command + " " + strings.Join(args, " ")
 	m.Commands = append(m.Commands, fullCommand)
-	
+
 	if m.CallCount < len(m.Outputs) {
 		return []byte(m.Outputs[m.CallCount]), nil
 	}
-	
+
 	if m.CallCount < len(m.Errors) {
 		return nil, m.Errors[m.CallCount]
 	}
-	
+
 	return []byte(""), nil
 }
 
