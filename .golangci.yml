@@ -1,0 +1,372 @@
+# golangci-lint configuration
+# https://golangci-lint.run/usage/configuration/
+
+run:
+  # Timeout for analysis
+  timeout: 5m
+  
+  # Exit code when at least one issue was found
+  issues-exit-code: 1
+  
+  # Include test files or not
+  tests: true
+  
+  # Skip dirs
+  skip-dirs:
+    - vendor
+    - .git
+    - bin
+    - build
+    - dist
+    
+  # Skip files
+  skip-files:
+    - ".*\\.generated\\.go$"
+
+# Output configuration
+output:
+  # Format: colored-line-number|line-number|json|tab|checkstyle|code-climate|junit-xml|github-actions
+  format: colored-line-number
+  
+  # Print lines of code with issue
+  print-issued-lines: true
+  
+  # Print linter name in the end of issue text
+  print-linter-name: true
+  
+  # Make issues output unique by line
+  uniq-by-line: true
+  
+  # Sort results by: filepath, line and column
+  sort-results: true
+
+# Linters configuration
+linters:
+  # Enable specific linters
+  enable:
+    - errcheck      # Check for unchecked errors
+    - gosimple      # Simplify code
+    - govet         # Go vet
+    - ineffassign   # Detect ineffectual assignments
+    - staticcheck   # Static analysis
+    - typecheck     # Type checking
+    - unused        # Find unused constants, variables, functions and types
+    - gofmt         # Format code
+    - goimports     # Fix imports
+    - gocritic      # Go critic
+    - gocyclo       # Cyclomatic complexity
+    - gosec         # Security issues
+    - misspell      # Misspelled English words
+    - unconvert     # Remove unnecessary type conversions
+    - unparam       # Find unused function parameters
+    - lll           # Line length limit
+    - dupl          # Code duplication
+    - prealloc      # Find slice declarations that could potentially be preallocated
+    - goconst       # Repeated strings that could be replaced by a constant
+    - gomod         # Go module related issues
+    - revive        # Fast, configurable, extensible linter
+    - exportloopref # An analyzer that finds exporting pointers for loop variables
+    - nolintlint    # Reports ill-formed or insufficient nolint directives
+    - whitespace    # Whitespace issues
+    - wsl           # Whitespace Linter
+    
+  # Disable specific linters
+  disable:
+    - deadcode      # Deprecated, use unused instead
+    - varcheck      # Deprecated, use unused instead
+    - structcheck   # Deprecated, use unused instead
+    - maligned      # Deprecated, use fieldalignment instead
+    - interfacer    # Deprecated
+    - scopelint     # Deprecated, use exportloopref instead
+    - golint        # Deprecated, use revive instead
+
+# Linters settings
+linters-settings:
+  # Settings for errcheck
+  errcheck:
+    # Report about not checking of errors in type assertions
+    check-type-assertions: true
+    # Report about assignment of errors to blank identifier
+    check-blank: true
+    # DEPRECATED: use exclude-functions instead
+    ignore: fmt:.*,io/ioutil:^Read.*
+    # List of functions to exclude from checking
+    exclude-functions:
+      - io/ioutil.ReadFile
+      - io.Copy(*bytes.Buffer)
+      - io.Copy(os.Stdout)
+      
+  # Settings for govet
+  govet:
+    # Report about shadowed variables
+    check-shadowing: true
+    # Enable all analyzers
+    enable-all: true
+    # Disable specific analyzers
+    disable:
+      - shadow
+      - fieldalignment
+      
+  # Settings for gofmt
+  gofmt:
+    # Simplify code
+    simplify: true
+    
+  # Settings for goimports
+  goimports:
+    # Put imports beginning with prefix after 3rd-party packages
+    local-prefixes: github.com/glanotte/gwt
+    
+  # Settings for gocyclo
+  gocyclo:
+    # Minimal code complexity to report
+    min-complexity: 15
+    
+  # Settings for gosec
+  gosec:
+    # To select a subset of rules to run
+    includes:
+      - G101 # Look for hard coded credentials
+      - G102 # Bind to all interfaces
+      - G103 # Audit the use of unsafe block
+      - G104 # Audit errors not checked
+      - G106 # Audit the use of ssh.InsecureIgnoreHostKey
+      - G107 # Url provided to HTTP request as taint input
+      - G108 # Profiling endpoint automatically exposed on /debug/pprof
+      - G109 # Potential Integer overflow made by strconv.Atoi result conversion to int16/32
+      - G110 # Potential DoS vulnerability via decompression bomb
+      - G201 # SQL query construction using format string
+      - G202 # SQL query construction using string concatenation
+      - G203 # Use of unescaped data in HTML templates
+      - G204 # Audit use of command execution
+      - G301 # Poor file permissions used when creating a directory
+      - G302 # Poor file permissions used with chmod
+      - G303 # Creating tempfile using a predictable path
+      - G304 # File path provided as taint input
+      - G305 # File traversal when extracting zip archive
+      - G401 # Detect the usage of DES, RC4, MD5 or SHA1
+      - G402 # Look for bad TLS connection settings
+      - G403 # Ensure minimum RSA key length of 2048 bits
+      - G404 # Insecure random number source (rand)
+      - G501 # Import blocklist: crypto/md5
+      - G502 # Import blocklist: crypto/des
+      - G503 # Import blocklist: crypto/rc4
+      - G504 # Import blocklist: net/http/cgi
+      - G505 # Import blocklist: crypto/sha1
+      - G601 # Implicit memory aliasing of items from a range statement
+      
+  # Settings for lll (line length limit)
+  lll:
+    line-length: 120
+    
+  # Settings for misspell
+  misspell:
+    locale: US
+    ignore-words:
+      - someword
+      
+  # Settings for goconst
+  goconst:
+    # Minimal length of string constant
+    min-len: 2
+    # Minimal occurrences count to trigger
+    min-occurrences: 2
+    # Ignore test files
+    ignore-tests: false
+    # Look for existing constants matching the values
+    match-constant: true
+    # Search also for duplicated numbers
+    numbers: false
+    # Minimum value, only works with goconst.numbers
+    min: 3
+    # Maximum value, only works with goconst.numbers
+    max: 3
+    # Ignore when constant is not used as function argument
+    ignore-calls: true
+    
+  # Settings for dupl
+  dupl:
+    # Tokens count to trigger issue
+    threshold: 100
+    
+  # Settings for gocritic
+  gocritic:
+    # Enable multiple checks by tags
+    enabled-tags:
+      - diagnostic
+      - experimental
+      - opinionated
+      - performance
+      - style
+    disabled-checks:
+      - dupImport # https://github.com/go-critic/go-critic/issues/845
+      - ifElseChain
+      - octalLiteral
+      - whyNoLint
+      - wrapperFunc
+      - importShadow # not important for now
+      - unnamedResult # not important for now
+      - unnecessaryBlock
+      
+  # Settings for revive
+  revive:
+    # Maximum number of open files at the same time
+    max-open-files: 2048
+    # When set to false, ignores files with "GENERATED" header, similar to golint
+    ignore-generated-header: true
+    # Sets the default severity to "warning"
+    severity: warning
+    # Enable all available rules
+    enable-all-rules: false
+    # Sets the default failure confidence, this means that linting errors with less than 0.8 confidence will be ignored
+    confidence: 0.8
+    rules:
+      - name: atomic
+      - name: blank-imports
+      - name: bool-literal-in-expr
+      - name: confusing-naming
+      - name: constant-logical-expr
+      - name: context-as-argument
+      - name: context-keys-type
+      - name: deep-exit
+      - name: defer
+      - name: dot-imports
+      - name: duplicated-imports
+      - name: early-return
+      - name: empty-block
+      - name: empty-lines
+      - name: error-naming
+      - name: error-return
+      - name: error-strings
+      - name: errorf
+      - name: exported
+      - name: flag-parameter
+      - name: function-result-limit
+        arguments: [3]
+      - name: get-return
+      - name: identical-branches
+      - name: if-return
+      - name: increment-decrement
+      - name: indent-error-flow
+      - name: modifies-parameter
+      - name: modifies-value-receiver
+      - name: package-comments
+      - name: range
+      - name: range-val-in-closure
+      - name: range-val-address
+      - name: receiver-naming
+      - name: redefines-builtin-id
+      - name: string-of-int
+      - name: superfluous-else
+      - name: time-naming
+      - name: unconditional-recursion
+      - name: unexported-naming
+      - name: unexported-return
+      - name: unhandled-error
+      - name: unnecessary-stmt
+      - name: unreachable-code
+      - name: unused-parameter
+      - name: unused-receiver
+      - name: use-any
+      - name: useless-break
+      - name: var-declaration
+      - name: var-naming
+
+# Issues configuration
+issues:
+  # List of regexps of issue texts to exclude
+  exclude:
+    # Exclude some linters from running on tests files
+    - "should have a package comment"
+    - "don't use an underscore in package name"
+    
+  # Excluding configuration per-path, per-linter, per-text and per-source
+  exclude-rules:
+    # Exclude some linters from running on tests files
+    - path: _test\.go
+      linters:
+        - gocyclo
+        - errcheck
+        - dupl
+        - gosec
+        - lll
+        - wsl
+        - goconst
+        - gocritic
+        - unparam
+        
+    # Exclude known linters from partially hard-to-fix issues
+    - linters:
+        - gocritic
+      text: "unnecessaryDefer:"
+      
+    # Exclude shadow checking on err variables
+    - linters:
+        - govet
+      text: 'shadow: declaration of "err"'
+      
+    # Exclude lll issues for long lines with go:generate
+    - linters:
+        - lll
+      source: "^//go:generate "
+      
+    # Exclude unparam issues for main and init functions
+    - linters:
+        - unparam
+      text: "`.*` is unused"
+      path: "main\\.go|init\\.go"
+      
+    # Exclude gosec issues for hardcoded credentials in tests
+    - linters:
+        - gosec
+      text: "G101"
+      path: "_test\\.go"
+      
+  # Independently from option `exclude` we use default exclude patterns
+  exclude-use-default: false
+  
+  # If set to true exclude and exclude-rules regular expressions become case sensitive
+  exclude-case-sensitive: false
+  
+  # The list of ids of default excludes to include or disable
+  include:
+    - EXC0002 # disable excluding of issues about comments from golint
+    - EXC0003 # disable excluding of issues about comments from golint
+    - EXC0004 # disable excluding of issues about comments from golint
+    - EXC0005 # disable excluding of issues about comments from golint
+    - EXC0011 # disable excluding of issues about comments from golint
+    - EXC0012 # disable excluding of issues about comments from golint
+    - EXC0013 # disable excluding of issues about comments from golint
+    - EXC0014 # disable excluding of issues about comments from golint
+    - EXC0015 # disable excluding of issues about comments from golint
+    
+  # Maximum issues count per one linter
+  max-issues-per-linter: 50
+  
+  # Maximum count of issues with the same text
+  max-same-issues: 3
+  
+  # Show only new issues created after git revision `REV`
+  # new-from-rev: HEAD
+  
+  # Show only new issues created in git patch with set file path
+  # new-from-patch: path/to/patch/file
+  
+  # Fix found issues (if it's supported by the linter)
+  fix: false
+
+severity:
+  # Default severity level to use when severity is not specified by a linter
+  default-severity: error
+  
+  # The default value is false
+  case-sensitive: true
+  
+  # Default value is empty list
+  rules:
+    - linters:
+        - dupl
+      severity: info
+    - linters:
+        - goconst
+      severity: info

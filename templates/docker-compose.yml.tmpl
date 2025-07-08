@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: {{.ProjectName}}_{{.BranchName}}_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # For nginx-proxy automatic routing
+      - VIRTUAL_HOST={{.BranchName}}.{{.ProjectDomain}}
+      - LETSENCRYPT_HOST={{.BranchName}}.{{.ProjectDomain}}
+      - LETSENCRYPT_EMAIL=admin@{{.ProjectDomain}}
+      
+      # Application environment
+      - NODE_ENV=development
+      - PORT=3000
+      - DATABASE_URL=postgres://postgres:password@db:5432/{{.ProjectName}}_{{.BranchName}}
+      - REDIS_URL=redis://redis:6379/0
+      - APP_URL=https://{{.BranchName}}.{{.ProjectDomain}}
+    ports:
+      - "{{.WebPort}}:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+      - redis
+    networks:
+      - {{.NetworkName}}
+      - proxy
+    command: npm run dev
+
+  db:
+    container_name: {{.ProjectName}}_{{.BranchName}}_db
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB={{.ProjectName}}_{{.BranchName}}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - {{.WorktreePath}}/data/postgres:/var/lib/postgresql/data
+    ports:
+      - "{{add .WebPort 1}}:5432"
+    networks:
+      - {{.NetworkName}}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    container_name: {{.ProjectName}}_{{.BranchName}}_redis
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - {{.WorktreePath}}/data/redis:/data
+    ports:
+      - "{{add .WebPort 2}}:6379"
+    networks:
+      - {{.NetworkName}}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Optional: Include nginx-proxy in the compose file
+  # Or run it separately as a shared service
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: nginxproxy/nginx-proxy:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - {{.WorktreePath}}/data/certs:/etc/nginx/certs
+      - {{.WorktreePath}}/data/vhost:/etc/nginx/vhost.d
+      - {{.WorktreePath}}/data/html:/usr/share/nginx/html
+    networks:
+      - proxy
+    restart: unless-stopped
+
+  # Optional: Let's Encrypt companion for SSL
+  letsencrypt:
+    container_name: letsencrypt
+    image: nginxproxy/acme-companion:latest
+    volumes_from:
+      - nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - {{.WorktreePath}}/data/acme:/etc/acme.sh
+    environment:
+      - DEFAULT_EMAIL=admin@{{.ProjectDomain}}
+    depends_on:
+      - nginx-proxy
+    networks:
+      - proxy
+    restart: unless-stopped
+
+networks:
+  {{.NetworkName}}:
+    name: {{.NetworkName}}
+    driver: bridge
+  proxy:
+    external: true
+    name: nginx-proxy
+
+volumes:
+  postgres_data:
+  redis_data:

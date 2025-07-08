@@ -1,0 +1,52 @@
+# Binaries
+/gwt
+/build/
+/dist/
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+.gitworktree/ports.json
+worktrees/
+
+# Local environment
+.env.local
+*.log
+
+# Coverage files
+coverage.out
+coverage.html
+coverage.xml
+*.cover
+*.coverage
+
+# Linting reports
+lint-report.xml
+golangci-lint-report.xml
+
+# Security scanning
+gosec-report.json
+
+# Pre-commit
+.pre-commit-config.yaml.bak

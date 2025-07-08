@@ -1,0 +1,34 @@
+version: 1
+
+project:
+  name: myapp
+  domain: app.lvh.me
+
+worktree:
+  base_path: "./worktrees"
+  naming_pattern: "{branch}"
+
+docker:
+  enabled: true
+  compose_file: "docker-compose.yml"
+  port_offset: 10000
+  network_name: "{project_name}_network"
+
+web:
+  enabled: true
+  proxy_type: "nginx-proxy"
+  subdomain_pattern: "{branch}.{project_domain}"
+
+templates:
+  default: "standard"
+  available:
+    standard:
+      files:
+        - src: "docker-compose.yml.tmpl"
+          dest: "docker-compose.yml"
+        - src: ".env.tmpl"
+          dest: ".env"
+
+variables:
+  db_name_prefix: "myapp"
+  redis_prefix: "myapp"

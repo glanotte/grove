@@ -1,0 +1,248 @@
+# .gitworktree/config.yaml - Advanced Configuration Example
+version: 1
+
+project:
+  name: myapp
+  domain: app.lvh.me
+  # Alternative domains for different environments
+  domains:
+    local: app.lvh.me
+    staging: staging.myapp.com
+    production: myapp.com
+
+worktree:
+  base_path: "./worktrees"
+  naming_pattern: "{branch}"
+  # Automatically prune worktrees after inactivity
+  auto_prune:
+    enabled: true
+    after_days: 30
+  # Hooks
+  hooks:
+    pre_create: ".gitworktree/hooks/pre-create.sh"
+    post_create: ".gitworktree/hooks/post-create.sh"
+    pre_remove: ".gitworktree/hooks/pre-remove.sh"
+
+docker:
+  enabled: true
+  compose_file: "docker-compose.yml"
+  # Port management
+  ports:
+    strategy: "hash"  # hash, sequential, or manual
+    range_start: 10000
+    range_end: 20000
+    # Manual port assignments
+    manual:
+      main: 10000
+      develop: 10001
+  # Network configuration
+  network:
+    name: "{project_name}_network"
+    driver: "bridge"
+    ipam:
+      subnet: "172.20.0.0/16"
+  # Container naming
+  container_prefix: "{project_name}_{branch_name}"
+  # Resource limits
+  resources:
+    memory_limit: "2g"
+    cpu_limit: "1.5"
+
+web:
+  enabled: true
+  proxy_type: "traefik"  # nginx-proxy, traefik, caddy
+  subdomain_pattern: "{branch}.{project_domain}"
+  # SSL configuration
+  ssl:
+    enabled: true
+    provider: "letsencrypt"  # letsencrypt, self-signed, mkcert
+    email: "admin@example.com"
+  # Traefik specific
+  traefik:
+    network: "traefik"
+    entrypoint: "websecure"
+    middlewares:
+      - "redirect-to-https"
+      - "security-headers"
+  # nginx-proxy specific
+  nginx_proxy:
+    network: "nginx-proxy"
+    custom_nginx_conf: ".gitworktree/nginx/custom.conf"
+
+# Database configuration
+database:
+  enabled: true
+  type: "postgres"  # postgres, mysql, mongodb
+  version: "15"
+  # Database naming
+  name_pattern: "{project_name}_{branch_name}"
+  # Seed data
+  seed:
+    enabled: true
+    source: ".gitworktree/seeds/development.sql"
+    on_create: true
+  # Backup configuration
+  backup:
+    enabled: true
+    schedule: "0 2 * * *"  # Daily at 2 AM
+    retention_days: 7
+
+# Cache configuration
+cache:
+  redis:
+    enabled: true
+    version: "7-alpine"
+    database_pattern: "{branch_id}"  # Uses numeric ID based on branch
+
+# Template configuration
+templates:
+  default: "full-stack"
+  # Template inheritance
+  base: "base"
+  available:
+    base:
+      files:
+        - src: ".env.base.tmpl"
+          dest: ".env.base"
+    
+    minimal:
+      extends: "base"
+      files:
+        - src: "docker-compose.minimal.yml.tmpl"
+          dest: "docker-compose.yml"
+    
+    full-stack:
+      extends: "base"
+      files:
+        - src: "docker-compose.full.yml.tmpl"
+          dest: "docker-compose.yml"
+        - src: ".env.tmpl"
+          dest: ".env"
+        - src: "nginx/default.conf.tmpl"
+          dest: "nginx/default.conf"
+    
+    microservices:
+      extends: "base"
+      files:
+        - src: "docker-compose.microservices.yml.tmpl"
+          dest: "docker-compose.yml"
+        - src: "kong/kong.yml.tmpl"
+          dest: "kong/kong.yml"
+
+# Environment-specific overrides
+environments:
+  development:
+    docker:
+      build_args:
+        NODE_ENV: "development"
+        ENABLE_HOT_RELOAD: "true"
+    variables:
+      debug: true
+      log_level: "debug"
+  
+  staging:
+    project:
+      domain: "staging.myapp.com"
+    docker:
+      build_args:
+        NODE_ENV: "production"
+    variables:
+      debug: false
+      log_level: "info"
+
+# Custom variables available in templates
+variables:
+  # Application
+  app_port: 3000
+  api_port: 4000
+  
+  # Database
+  db_name_prefix: "myapp"
+  db_user: "appuser"
+  db_password: "changeme"  # Should use secrets in production
+  
+  # Redis
+  redis_prefix: "myapp"
+  
+  # Email
+  smtp_host: "mailhog"
+  smtp_port: 1025
+  
+  # Feature flags
+  features:
+    auth: true
+    payments: false
+    analytics: true
+  
+  # External services
+  services:
+    sentry_dsn: "https://xxx@sentry.io/xxx"
+    stripe_key: "sk_test_xxx"
+
+# Port allocation tracking
+port_allocation:
+  # Reserved ports for shared services
+  reserved:
+    nginx-proxy: 80
+    nginx-proxy-ssl: 443
+    traefik: 8080
+    mailhog: 8025
+    redis-commander: 8081
+
+# Cleanup configuration
+cleanup:
+  # Remove Docker volumes on worktree removal
+  remove_volumes: false
+  # Remove database on worktree removal
+  drop_database: true
+  # Archive worktree data before removal
+  archive:
+    enabled: true
+    path: ".gitworktree/archives"
+
+# Integration with external tools
+integrations:
+  # VS Code
+  vscode:
+    enabled: true
+    workspace_template: ".gitworktree/vscode/workspace.code-workspace.tmpl"
+  
+  # direnv
+  direnv:
+    enabled: true
+    envrc_template: ".gitworktree/direnv/envrc.tmpl"
+  
+  # Make
+  make:
+    enabled: true
+    makefile_template: ".gitworktree/make/Makefile.tmpl"
+
+# Monitoring and logging
+monitoring:
+  enabled: false
+  prometheus:
+    enabled: true
+    port: 9090
+  grafana:
+    enabled: true
+    port: 3001
+  loki:
+    enabled: true
+    port: 3100
+
+# Security
+security:
+  # Scan for secrets before creating worktree
+  secret_scanning:
+    enabled: true
+    tools:
+      - "gitleaks"
+      - "trufflehog"
+  
+  # Network isolation
+  network_isolation:
+    enabled: true
+    allow_internet: true
+    allowed_networks:
+      - "default"
+      - "{project_name}_network"
