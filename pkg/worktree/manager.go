@@ -19,7 +19,7 @@ type Manager struct {
 
 // NewManager creates a new worktree manager
 func NewManager(baseDir string) (*Manager, error) {
-    configPath := filepath.Join(baseDir, ".gitworktree", "config.yaml")
+    configPath := filepath.Join(baseDir, ".grove", "config.yaml")
     
     m := &Manager{
         BaseDir:    baseDir,
@@ -198,7 +198,7 @@ func (m *Manager) buildTemplateContext(worktreePath, branchName string) map[stri
 
 // processTemplateFile processes a single template file
 func (m *Manager) processTemplateFile(worktreePath string, file TemplateFile, ctx map[string]interface{}) error {
-    templatePath := filepath.Join(m.BaseDir, ".gitworktree", "templates", file.Src)
+    templatePath := filepath.Join(m.BaseDir, ".grove", "templates", file.Src)
     destPath := filepath.Join(worktreePath, file.Dest)
     
     // Read template

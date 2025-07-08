@@ -263,10 +263,10 @@ func BenchmarkManager_calculatePort(b *testing.B) {
 func setupTestManager(t *testing.T) (*Manager, string) {
 	tempDir := t.TempDir()
 	
-	// Create .gitworktree directory
-	gitWorktreeDir := filepath.Join(tempDir, ".gitworktree")
-	if err := os.MkdirAll(gitWorktreeDir, 0755); err != nil {
-		t.Fatalf("Failed to create .gitworktree directory: %v", err)
+	// Create .grove directory
+	groveDir := filepath.Join(tempDir, ".grove")
+	if err := os.MkdirAll(groveDir, 0755); err != nil {
+		t.Fatalf("Failed to create .grove directory: %v", err)
 	}
 
 	manager, err := NewManager(tempDir)

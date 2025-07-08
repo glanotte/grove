@@ -70,10 +70,10 @@ build-all:
 # Development helpers
 dev-init:
 	@echo "Creating example configuration..."
-	@mkdir -p .gitworktree/templates
-	@cp examples/configs/basic.yaml .gitworktree/config.yaml
-	@cp templates/* .gitworktree/templates/
-	@echo "Configuration created at .gitworktree/"
+	@mkdir -p .grove/templates
+	@cp examples/configs/basic.yaml .grove/config.yaml
+	@cp templates/* .grove/templates/
+	@echo "Configuration created at .grove/"
 
 fmt:
 	go fmt ./...

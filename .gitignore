@@ -27,7 +27,8 @@ go.work
 Thumbs.db
 
 # Project specific
-.gitworktree/ports.json
+.grove/ports.json
+.grove/
 worktrees/
 
 # Local environment

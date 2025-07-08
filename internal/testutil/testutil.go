@@ -79,13 +79,13 @@ func CreateTestConfig() *worktree.Config {
 
 // CreateTestWorktreeStructure creates a test worktree directory structure
 func CreateTestWorktreeStructure(t *testing.T, baseDir string) {
-	gitWorktreeDir := filepath.Join(baseDir, ".gitworktree")
-	templatesDir := filepath.Join(gitWorktreeDir, "templates")
+	groveDir := filepath.Join(baseDir, ".grove")
+	templatesDir := filepath.Join(groveDir, "templates")
 	
 	// Create directories
 	err := os.MkdirAll(templatesDir, 0755)
 	if err != nil {
-		t.Fatalf("Failed to create .gitworktree/templates: %v", err)
+		t.Fatalf("Failed to create .grove/templates: %v", err)
 	}
 	
 	// Create template files

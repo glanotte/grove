@@ -14,7 +14,7 @@ func NewRootCmd(version, commit, date string) *cobra.Command {
 Docker integration, and automatic web serving configuration.`,
     }
 
-    rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file (default is .gitworktree/config.yaml)")
+    rootCmd.PersistentFlags().StringVar(&configFile, "config", "", "config file (default is .grove/config.yaml)")
 
     rootCmd.AddCommand(
         newInitCmd(),

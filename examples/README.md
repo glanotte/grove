@@ -28,8 +28,8 @@ grove init git@github.com:user/myapp.git
 cd myapp
 
 # Setup configuration
-cp examples/configs/basic.yaml .gitworktree/config.yaml
-cp -r templates .gitworktree/
+cp examples/configs/basic.yaml .grove/config.yaml
+cp -r templates .grove/
 
 # Create feature branch worktree
 grove create feature/user-auth
@@ -50,7 +50,7 @@ grove-up
 
 ```bash
 # Use advanced configuration
-cp examples/configs/advanced.yaml .gitworktree/config.yaml
+cp examples/configs/advanced.yaml .grove/config.yaml
 
 # Create worktree with custom template
 grove create feature/api-refactor --template microservices
@@ -66,7 +66,7 @@ grove create feature/api-refactor --template microservices
 
 Create your own templates by:
 
-1. Adding template files to `.gitworktree/templates/`
+1. Adding template files to `.grove/templates/`
 2. Defining template sets in your config.yaml
 3. Using template variables like `{{.BranchName}}` and `{{.ProjectName}}`
 

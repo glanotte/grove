@@ -1,4 +1,4 @@
-# .gitworktree/config.yaml - Advanced Configuration Example
+# .grove/config.yaml - Advanced Configuration Example
 version: 1
 
 project:
@@ -19,9 +19,9 @@ worktree:
     after_days: 30
   # Hooks
   hooks:
-    pre_create: ".gitworktree/hooks/pre-create.sh"
-    post_create: ".gitworktree/hooks/post-create.sh"
-    pre_remove: ".gitworktree/hooks/pre-remove.sh"
+    pre_create: ".grove/hooks/pre-create.sh"
+    post_create: ".grove/hooks/post-create.sh"
+    pre_remove: ".grove/hooks/pre-remove.sh"
 
 docker:
   enabled: true
@@ -67,7 +67,7 @@ web:
   # nginx-proxy specific
   nginx_proxy:
     network: "nginx-proxy"
-    custom_nginx_conf: ".gitworktree/nginx/custom.conf"
+    custom_nginx_conf: ".grove/nginx/custom.conf"
 
 # Database configuration
 database:
@@ -79,7 +79,7 @@ database:
   # Seed data
   seed:
     enabled: true
-    source: ".gitworktree/seeds/development.sql"
+    source: ".grove/seeds/development.sql"
     on_create: true
   # Backup configuration
   backup:
@@ -198,24 +198,24 @@ cleanup:
   # Archive worktree data before removal
   archive:
     enabled: true
-    path: ".gitworktree/archives"
+    path: ".grove/archives"
 
 # Integration with external tools
 integrations:
   # VS Code
   vscode:
     enabled: true
-    workspace_template: ".gitworktree/vscode/workspace.code-workspace.tmpl"
+    workspace_template: ".grove/vscode/workspace.code-workspace.tmpl"
   
   # direnv
   direnv:
     enabled: true
-    envrc_template: ".gitworktree/direnv/envrc.tmpl"
+    envrc_template: ".grove/direnv/envrc.tmpl"
   
   # Make
   make:
     enabled: true
-    makefile_template: ".gitworktree/make/Makefile.tmpl"
+    makefile_template: ".grove/make/Makefile.tmpl"
 
 # Monitoring and logging
 monitoring:

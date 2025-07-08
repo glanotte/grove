@@ -37,7 +37,7 @@ go install github.com/glanotte/grove@latest
 
 2. **Create configuration:**
    ```bash
-   make dev-init  # Creates .gitworktree/config.yaml and templates
+   make dev-init  # Creates .grove/config.yaml and templates
    ```
 
 3. **Create a new worktree:**
@@ -57,7 +57,7 @@ go install github.com/glanotte/grove@latest
 
 ## Configuration
 
-Configuration is stored in `.gitworktree/config.yaml`. See `examples/configs/` for example configurations:
+Configuration is stored in `.grove/config.yaml`. See `examples/configs/` for example configurations:
 
 - `basic.yaml` - Simple configuration with Docker and nginx-proxy
 - `advanced.yaml` - Full-featured configuration with all options
@@ -88,7 +88,7 @@ This provides:
 
 ## Templates
 
-Templates are stored in `.gitworktree/templates/` and processed when creating worktrees. See `templates/README.md` for available variables and usage.
+Templates are stored in `.grove/templates/` and processed when creating worktrees. See `templates/README.md` for available variables and usage.
 
 ## Development
 

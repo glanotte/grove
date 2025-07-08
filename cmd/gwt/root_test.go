@@ -56,7 +56,7 @@ func TestRootCmd_Flags(t *testing.T) {
 		t.Errorf("Expected config flag default value to be empty, got %s", configFlag.DefValue)
 	}
 
-	if configFlag.Usage != "config file (default is .gitworktree/config.yaml)" {
+	if configFlag.Usage != "config file (default is .grove/config.yaml)" {
 		t.Errorf("Expected correct config flag usage, got %s", configFlag.Usage)
 	}
 }
