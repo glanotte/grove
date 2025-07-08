@@ -13,8 +13,8 @@ func TestNewRootCmd(t *testing.T) {
 
 	cmd := NewRootCmd(version, commit, date)
 
-	if cmd.Use != "gwt" {
-		t.Errorf("Expected Use 'gwt', got %s", cmd.Use)
+	if cmd.Use != "grove" {
+		t.Errorf("Expected Use 'grove', got %s", cmd.Use)
 	}
 
 	if cmd.Short != "Git worktree manager with Docker and template support" {

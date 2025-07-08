@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
 # Git Worktree Manager Shell Integration
 # Add this to your .bashrc or .zshrc:
-# source /path/to/gwt.sh
+# source /path/to/grove.sh
 
-# Main gwt function that wraps the gwt binary
-gwt() {
+# Main grove function that wraps the grove binary
+grove() {
     case "$1" in
         switch|cd)
             # Special handling for switch command to change directory
             if [ -z "$2" ]; then
-                echo "Usage: gwt switch <worktree-name>"
+                echo "Usage: grove switch <worktree-name>"
                 return 1
             fi
             
-            # Get the worktree path from the gwt binary
+            # Get the worktree path from the grove binary
             local worktree_path
-            worktree_path=$(command gwt switch "$2" 2>/dev/null)
+            worktree_path=$(command grove switch "$2" 2>/dev/null)
             
             if [ $? -eq 0 ] && [ -n "$worktree_path" ] && [ -d "$worktree_path" ]; then
                 cd "$worktree_path" || return 1
@@ -49,27 +49,27 @@ gwt() {
             
         create)
             # Run the create command and auto-switch if successful
-            command gwt "$@"
+            command grove "$@"
             if [ $? -eq 0 ] && [ -n "$2" ]; then
                 echo ""
                 echo "Worktree created successfully!"
                 read -p "Switch to new worktree? [Y/n] " -n 1 -r
                 echo
                 if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
-                    gwt switch "$2"
+                    grove switch "$2"
                 fi
             fi
             ;;
             
         *)
             # Pass through all other commands
-            command gwt "$@"
+            command grove "$@"
             ;;
     esac
 }
 
-# Bash completion for gwt
-_gwt_completion() {
+# Bash completion for grove
+_grove_completion() {
     local cur prev opts
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
@@ -79,14 +79,14 @@ _gwt_completion() {
     local commands="init create list remove switch version help"
     
     case "${prev}" in
-        gwt)
+        grove)
             COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
             return 0
             ;;
         switch|remove|cd)
             # Get worktree names for completion
-            if command -v gwt &> /dev/null; then
-                local worktrees=$(gwt list --format=names 2>/dev/null | grep -v "^$")
+            if command -v grove &> /dev/null; then
+                local worktrees=$(grove list --format=names 2>/dev/null | grep -v "^$")
                 COMPREPLY=( $(compgen -W "${worktrees}" -- ${cur}) )
             fi
             return 0
@@ -100,9 +100,9 @@ _gwt_completion() {
     esac
 }
 
-# ZSH completion for gwt
+# ZSH completion for grove
 if [ -n "$ZSH_VERSION" ]; then
-    _gwt_zsh_completion() {
+    _grove_zsh_completion() {
         local -a commands worktrees branches
         
         commands=(
@@ -117,8 +117,8 @@ if [ -n "$ZSH_VERSION" ]; then
         
         case $words[2] in
             switch|remove|cd)
-                if command -v gwt &> /dev/null; then
-                    worktrees=($(gwt list --format=names 2>/dev/null | grep -v "^$"))
+                if command -v grove &> /dev/null; then
+                    worktrees=($(grove list --format=names 2>/dev/null | grep -v "^$"))
                     _describe 'worktree' worktrees
                 fi
                 ;;
@@ -132,20 +132,20 @@ if [ -n "$ZSH_VERSION" ]; then
         esac
     }
     
-    compdef _gwt_zsh_completion gwt
+    compdef _grove_zsh_completion grove
 else
     # Bash completion
-    complete -F _gwt_completion gwt
+    complete -F _grove_completion grove
 fi
 
 # Aliases for common operations
-alias gwl='gwt list'
-alias gwc='gwt create'
-alias gws='gwt switch'
-alias gwr='gwt remove'
+alias grl='grove list'
+alias grc='grove create'
+alias grs='grove switch'
+alias grr='grove remove'
 
 # Helper function to show current worktree info
-gwt-info() {
+grove-info() {
     if ! git rev-parse --git-dir > /dev/null 2>&1; then
         echo "Not in a git repository"
         return 1
@@ -176,7 +176,7 @@ gwt-info() {
 }
 
 # Function to start Docker services in current worktree
-gwt-up() {
+grove-up() {
     if [ -f "docker-compose.yml" ]; then
         echo "Starting Docker services..."
         docker-compose up -d
@@ -189,7 +189,7 @@ gwt-up() {
 }
 
 # Function to stop Docker services in current worktree
-gwt-down() {
+grove-down() {
     if [ -f "docker-compose.yml" ]; then
         echo "Stopping Docker services..."
         docker-compose down
@@ -200,7 +200,7 @@ gwt-down() {
 }
 
 # Function to show logs for current worktree
-gwt-logs() {
+grove-logs() {
     if [ -f "docker-compose.yml" ]; then
         docker-compose logs -f "$@"
     else
@@ -210,7 +210,7 @@ gwt-logs() {
 }
 
 # Export functions for use in subshells
-export -f gwt gwt-info gwt-up gwt-down gwt-logs
+export -f grove grove-info grove-up grove-down grove-logs
 
 # Optional: Add worktree info to prompt
 # For bash PS1 or zsh PROMPT, you can add:

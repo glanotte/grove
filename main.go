@@ -4,7 +4,7 @@ import (
     "fmt"
     "os"
 
-    "github.com/glanotte/gwt/cmd/gwt"
+    "github.com/glanotte/grove/cmd/gwt"
 )
 
 var (

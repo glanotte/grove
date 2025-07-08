@@ -1,6 +1,6 @@
 # Development Guide
 
-This document outlines the development practices, tools, and workflows for the GWT project.
+This document outlines the development practices, tools, and workflows for the Grove project.
 
 ## Go Best Practices
 

@@ -115,7 +115,7 @@ linters-settings:
   # Settings for goimports
   goimports:
     # Put imports beginning with prefix after 3rd-party packages
-    local-prefixes: github.com/glanotte/gwt
+    local-prefixes: github.com/glanotte/grove
     
   # Settings for gocyclo
   gocyclo:

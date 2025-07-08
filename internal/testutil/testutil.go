@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/glanotte/gwt/pkg/worktree"
+	"github.com/glanotte/grove/pkg/worktree"
 )
 
 // TempDir creates a temporary directory for testing
 func TempDir(t *testing.T) string {
-	dir, err := ioutil.TempDir("", "gwt-test-")
+	dir, err := ioutil.TempDir("", "grove-test-")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}

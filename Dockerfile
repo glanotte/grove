@@ -17,7 +17,7 @@ RUN go mod download
 COPY . .
 
 # Build the binary
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gwt .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o grove .
 
 # Final stage
 FROM alpine:latest
@@ -26,14 +26,14 @@ FROM alpine:latest
 RUN apk add --no-cache git docker docker-compose ca-certificates
 
 # Create non-root user
-RUN addgroup -g 1000 gwt && \
-    adduser -u 1000 -G gwt -s /bin/sh -D gwt
+RUN addgroup -g 1000 grove && \
+    adduser -u 1000 -G grove -s /bin/sh -D grove
 
 # Set working directory
-WORKDIR /home/gwt
+WORKDIR /home/grove
 
 # Copy binary from builder stage
-COPY --from=builder /app/gwt /usr/local/bin/gwt
+COPY --from=builder /app/grove /usr/local/bin/grove
 
 # Copy templates and examples
 COPY --from=builder /app/templates ./templates
@@ -41,13 +41,13 @@ COPY --from=builder /app/examples ./examples
 COPY --from=builder /app/scripts ./scripts
 
 # Make binary executable
-RUN chmod +x /usr/local/bin/gwt
+RUN chmod +x /usr/local/bin/grove
 
 # Switch to non-root user
-USER gwt
+USER grove
 
 # Set up environment
 ENV PATH="/usr/local/bin:${PATH}"
 
 # Default command
-CMD ["gwt", "--help"]
+CMD ["grove", "--help"]

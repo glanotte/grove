@@ -24,7 +24,7 @@ A comprehensive configuration showing all available options:
 
 ```bash
 # Initialize repository
-gwt init git@github.com:user/myapp.git
+grove init git@github.com:user/myapp.git
 cd myapp
 
 # Setup configuration
@@ -32,16 +32,16 @@ cp examples/configs/basic.yaml .gitworktree/config.yaml
 cp -r templates .gitworktree/
 
 # Create feature branch worktree
-gwt create feature/user-auth
+grove create feature/user-auth
 
 # List worktrees
-gwt list
+grove list
 
 # Switch to worktree (with shell integration)
-gwt switch feature/user-auth
+grove switch feature/user-auth
 
 # Start services
-gwt-up
+grove-up
 
 # Your app is now running at https://user-auth.app.lvh.me
 ```
@@ -53,7 +53,7 @@ gwt-up
 cp examples/configs/advanced.yaml .gitworktree/config.yaml
 
 # Create worktree with custom template
-gwt create feature/api-refactor --template microservices
+grove create feature/api-refactor --template microservices
 
 # The worktree now has:
 # - Custom docker-compose.yml for microservices

@@ -1,7 +1,7 @@
-# Makefile for gwt (Git Worktree Manager)
+# Makefile for grove (Git Worktree Manager)
 
 # Variables
-BINARY_NAME=gwt
+BINARY_NAME=grove
 VERSION=$(shell git describe --tags --always --dirty)
 COMMIT=$(shell git rev-parse --short HEAD)
 DATE=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -53,7 +53,7 @@ run: build
 install: build
 	sudo cp $(BUILD_DIR)/$(BINARY_NAME) /usr/local/bin/
 	@echo "Installing shell integration..."
-	@echo "Add 'source $(PWD)/scripts/gwt.sh' to your shell rc file"
+	@echo "Add 'source $(PWD)/scripts/grove.sh' to your shell rc file"
 
 uninstall:
 	sudo rm -f /usr/local/bin/$(BINARY_NAME)
@@ -108,7 +108,7 @@ pre-commit: fmt lint-fix vet test-race
 # Homebrew formula generation (for later)
 homebrew-formula:
 	@echo "Generating Homebrew formula..."
-	@cat homebrew/gwt.rb.template | \
+	@cat homebrew/grove.rb.template | \
 		sed 's/{{VERSION}}/$(VERSION)/g' | \
 		sed 's/{{SHA256}}/$(shell shasum -a 256 $(DIST_DIR)/$(BINARY_NAME)-darwin-amd64 | cut -d' ' -f1)/g' \
-		> homebrew/gwt.rb
+		> homebrew/grove.rb

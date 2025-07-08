@@ -1,4 +1,4 @@
-module github.com/glanotte/gwt
+module github.com/glanotte/grove
 
 go 1.21
 

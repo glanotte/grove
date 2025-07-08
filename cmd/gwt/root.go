@@ -8,9 +8,9 @@ func NewRootCmd(version, commit, date string) *cobra.Command {
     var configFile string
 
     rootCmd := &cobra.Command{
-        Use:   "gwt",
+        Use:   "grove",
         Short: "Git worktree manager with Docker and template support",
-        Long: `gwt is a CLI tool for managing git worktrees with template support,
+        Long: `grove is a CLI tool for managing git worktrees with template support,
 Docker integration, and automatic web serving configuration.`,
     }
 

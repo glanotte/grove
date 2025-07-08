@@ -1,4 +1,4 @@
-# GWT - Git Worktree Manager
+# Grove - Git Worktree Manager
 
 A CLI tool for managing git worktrees with template support, Docker integration, and automatic web serving configuration.
 
@@ -15,8 +15,8 @@ A CLI tool for managing git worktrees with template support, Docker integration,
 ### From Source
 
 ```bash
-git clone https://github.com/glanotte/gwt.git
-cd gwt
+git clone https://github.com/glanotte/grove.git
+cd grove
 make build
 make install
 ```
@@ -24,14 +24,14 @@ make install
 ### Using Go
 
 ```bash
-go install github.com/glanotte/gwt@latest
+go install github.com/glanotte/grove@latest
 ```
 
 ## Quick Start
 
 1. **Initialize a repository for worktree management:**
    ```bash
-   gwt init git@github.com:user/repo.git
+   grove init git@github.com:user/repo.git
    cd repo
    ```
 
@@ -42,17 +42,17 @@ go install github.com/glanotte/gwt@latest
 
 3. **Create a new worktree:**
    ```bash
-   gwt create feature/new-feature
+   grove create feature/new-feature
    ```
 
 4. **List worktrees:**
    ```bash
-   gwt list
+   grove list
    ```
 
 5. **Switch to a worktree:**
    ```bash
-   gwt switch feature/new-feature
+   grove switch feature/new-feature
    ```
 
 ## Configuration
@@ -68,23 +68,23 @@ For enhanced functionality, add the shell integration to your shell:
 
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
-source /path/to/gwt/scripts/gwt.sh
+source /path/to/grove/scripts/grove.sh
 ```
 
 This provides:
 - Auto-completion for commands and worktree names
-- Enhanced `gwt switch` that actually changes directory
-- Helper functions like `gwt-info`, `gwt-up`, `gwt-down`
-- Aliases: `gwl`, `gwc`, `gws`, `gwr`
+- Enhanced `grove switch` that actually changes directory
+- Helper functions like `grove-info`, `grove-up`, `grove-down`
+- Aliases: `grl`, `grc`, `grs`, `grr`
 
 ## Commands
 
-- `gwt init <repo-url>` - Initialize a bare repository
-- `gwt create <branch>` - Create a new worktree
-- `gwt list` - List all worktrees
-- `gwt remove <worktree>` - Remove a worktree
-- `gwt switch <worktree>` - Switch to a worktree (with shell integration)
-- `gwt version` - Show version information
+- `grove init <repo-url>` - Initialize a bare repository
+- `grove create <branch>` - Create a new worktree
+- `grove list` - List all worktrees
+- `grove remove <worktree>` - Remove a worktree
+- `grove switch <worktree>` - Switch to a worktree (with shell integration)
+- `grove version` - Show version information
 
 ## Templates
 
